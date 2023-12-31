@@ -72,15 +72,65 @@ const char *token_names[] = {
     "CLOSE_BRACKET",
     "OPEN_BRACKET"
 };
+int parse_type();
+int parse_simple();
 
+int match(int expected_token) {
+    int token = yylex();
+    if (token == expected_token) {
+        printf("%s: %s\n", yytext, token_names[token]);
+        return 1;  // Matched successfully
+    } else {
+        printf("Error: Expected %s but got %s\n", token_names[expected_token], yytext);
+        return 0;  // Match failed
+    }
+}
+
+// Function for the 'type' non-terminal
+int parse_type() {
+    int token = yylex();
+    
+    if (token == REAL || token == INT || token == CHAR || token == NUMBER) {
+        printf("%s: %s\n", yytext, token_names[token]);
+        return 1;  // Successfully parsed
+    } else if (token == HAT) {
+        printf("%s: %s\n", yytext, token_names[token]);
+        return match(IDENTIFIER);  // Parse ^id
+    } else if (token == ARRAY) {
+        printf("%s: %s\n", yytext, token_names[token]);
+        if (match(OPEN_BRACKET) && match(NUMBER) && match(DOTDOT) && match(NUMBER) && match(CLOSE_BRACKET) && match(OF)) {
+            return parse_type();  // Parse array [num doddot num] of type
+        } else {
+            return 0;  // Error in parsing array declaration
+        }
+    } else {
+        printf("Error: Unexpected token %s\n", yytext);
+        return 0;  // Parsing failed
+    }
+}
+
+// Function for the 'simple' non-terminal
+int parse_simple() {
+    int token = yylex();
+
+    if (token == REAL || token == INT || token == CHAR || token == NUMBER) {
+        printf("%s: %s\n", yytext, token_names[token]);
+        return 1;  // Successfully parsed
+    } else {
+        printf("Error: Unexpected token %s\n", yytext);
+        return 0;  // Parsing failed
+    }
+}
 
 int main() {
-  int token;
+    int success = parse_type();
 
+    if (success) {
+        printf("Parsing successful!\n");
+    } else {
+        printf("Parsing failed.\n");
+    }
 
-  while ((token = yylex()) != 0) {
-      printf("%s: %s\n", yytext, token_names[token]);
-  }
-  return 0;
+    return 0;
 }
 

@@ -70,7 +70,7 @@ to                { return TO; } // Token for TO
 "*"               { return MULT; } // Token for *
 ";"              { return SEMICOLON; } // Token for ;
 ":="              { return EQUAL; } // Token for :=
-[1-9][0-9]*     { return NUMBER; } // Token for numbers
+-?[1-9][0-9]*     { return NUMBER; } // Token for numberst 
 [a-zA-Z_][a-zA-Z0-9_]*  { return IDENTIFIER; } // Tokea for identifiers
 [ \t\n]         ; // Ignore whitespace and newline characters
 .               { return UNKNOWN; } // Token for unknown characters
