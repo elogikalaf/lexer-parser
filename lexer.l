@@ -25,14 +25,27 @@
 #define GEQ 18
 #define GT 19
 #define ASSIGN 20
-#define COLOR 21
+#define OF 21
 #define PLUST 22
 #define MINUS 23
 #define MULT 24
 #define EQUAL 25
+#define ARRAY 26
+#define HAT 27
+#define REAL 28
+#define CHAR 29
+#define INT 30
+#define DOTDOT 31
+#define CLOSE_BRACKET 32
+#define OPEN_BRACKET 33
 %}
 
 %%
+real              { return REAL; } // Token for REAL
+char              { return CHAR; } // Token for char
+integer           { return INT; } // Token for integer
+of                { return OF; } // Token for OF
+array             { return ARRAY; } // Token for array
 begin             { return BEGIN_TOKEN; } // Token for begin
 end               { return END_TOKEN; } // Token for end
 for               { return FOR_TOKEN; } // Token for FOR_TOKEN
@@ -42,6 +55,10 @@ do                { return DO_TOKEN; } // Token for DO_TOKEN
 then              { return THEN_TOKEN; } // Token for THEN_TOKEN
 else              { return ELSE_TOKEN; } // Token for ELSE_TOKEN
 to                { return TO; } // Token for TO
+"]"               { return CLOSE_BRACKET; } // Token for ]
+"["               { return OPEN_BRACKET; } // Token for ]
+".."              { return DOTDOT; } // Token for ..
+"^"               { return HAT; } // Token for ^
 "<="              { return LEQ; } // Token for <=
 "<>"              { return NEQ; } // Token for <>
 "<"               { return LT; } // Token for <
@@ -53,7 +70,7 @@ to                { return TO; } // Token for TO
 "*"               { return MULT; } // Token for *
 ";"              { return SEMICOLON; } // Token for ;
 ":="              { return EQUAL; } // Token for :=
-[1-9]+(.[1-9]+)?           { return NUMBER; } // Token for numbers
+[1-9][0-9]*     { return NUMBER; } // Token for numbers
 [a-zA-Z_][a-zA-Z0-9_]*  { return IDENTIFIER; } // Tokea for identifiers
 [ \t\n]         ; // Ignore whitespace and newline characters
 .               { return UNKNOWN; } // Token for unknown characters
